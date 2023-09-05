@@ -84,15 +84,24 @@ class condition extends \core_availability\condition {
         global $DB;
 
         $course = $this->cmid;
-        $sqlcoursecomplete = "SELECT * FROM {course_completions} as a WHERE a.course = $course AND a.userid = $userid";
-        $datacompletes = $DB->get_records_sql($sqlcoursecomplete);
-        $allow = false;
-        foreach($datacompletes as $datacomplete){
+        $user = $DB->get_record('course_completions', array('userid'=> $userid, 'course'=> $course));
 
-            if($datacomplete->timecompleted>0){
-                $allow = true; 
-            }
+        //if data is available means user has been completed course
+        if($user && $user->id > 0 && $user->timecompleted != NULL){
+
+            $allow = true; 
         }
+        else{
+            $allow = false; 
+        }
+
+		if ($this->expectedcompletion === 0) {
+            $allow = !$allow;
+        }
+
+		if ($not) {
+			$allow = !$allow;
+		}
         return $allow;
     }
 
