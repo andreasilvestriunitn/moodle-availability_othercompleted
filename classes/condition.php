@@ -82,7 +82,7 @@ class condition extends \core_availability\condition {
     public function is_available($not, \core_availability\info $info, $grabthelot, $userid) {
         
         global $DB;
-        $course = $this->cmid;
+        $course = $this->courseid;
         $user = $DB->get_record('course_completions', array('userid'=> $userid, 'course'=> $course));
 
         //if data is available means user has been completed course
@@ -126,7 +126,7 @@ class condition extends \core_availability\condition {
     public function get_description($full, $not, \core_availability\info $info) {
         global $DB;
         // Get name for module.
-        $modname = $DB->get_record('course', ['id' => $this->cmid])->fullname;
+        $modname = $DB->get_record('course', ['id' => $this->courseid])->fullname;
 
         // Work out which lang string to use.
         if ($not) {
